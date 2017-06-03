@@ -9,7 +9,7 @@ _.existLocalesDir = () => Observable.exists(LOCALES_DIR)
 
 _.resolveExistDir = (exists) => {
     if (exists) {
-        console.log("Locales directory have already created")
+        console.log("Locales directory have already been created")
         return Observable.just(true);
     } else {
         console.log("Creating locales directory")
