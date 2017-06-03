@@ -1,36 +1,48 @@
-const {
-    just
-} = require("../observables/common")
-const {
-    exists,
-    mkdir
-} = require('../observables/fs')
+const Observable = require('../observables/main')
 
 const LOCALES_DIR = process.cwd() + "/locales"
+const DEFAULT_LANGS = ['en', 'es']
 
 const _ = {}
 
-_.existLocalesDir = () => exists(LOCALES_DIR)
+_.existLocalesDir = () => Observable.exists(LOCALES_DIR)
 
 _.resolveExistDir = (exists) => {
     if (exists) {
-        console.log("Locales directory exists yet")
-        return just(true);
+        console.log("Locales directory have already created")
+        return Observable.just(true);
     } else {
         console.log("Creating locales directory")
-        return mkdir(LOCALE_DIR)
+        return Observable.mkdir(LOCALES_DIR)
     }
 }
 
-_.createLocales = function(){
-    console.log(arguments)
-    return just(true)
+_.addLocales = function(otherLangs){
+    return () => Observable.fromArray(DEFAULT_LANGS.concat(otherLangs))
+}
+
+_.existLocale = (locale) =>{
+    const pathname = LOCALES_DIR+"/"+locale+".yml"
+    return Observable.exists(pathname)
+    .map(exists => {
+        return {name:locale, exists, pathname}
+    })
+}
+
+_.createLocale = (locale) =>{
+    return Observable.createFile(locale.pathname)
 }
 
 _.init = function(otherLangs){
     _.existLocalesDir()
         .flatMap(_.resolveExistDir)
-        .subscribe((result) => console.log(result), (err) => console.error(err))
+        .flatMap(_.addLocales(otherLangs))
+        .flatMap(_.existLocale)
+        .filter(locale => !locale.exists)
+        .flatMap(_.createLocale)
+        .doOnCompleted(()=> console.log("Ok"))
+        .doOnError((err)=>console.err(err))
+        .subscribe()
 }
 
 
