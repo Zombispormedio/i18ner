@@ -1,12 +1,20 @@
 const DefaultPersistence = require("../src/plugins/DefaultPersistence")
-const Sequelize = require("sequelize")
+
+var Sequelize;
+
+try{
+    Sequelize = require("sequelize")
+}catch{
+    console.warn("Install sequelize and every dependencies that it needs")
+    process.exit()
+}
+
 const {Observable} = require("rx")
 
 function SequelizePlugin(url) {
     DefaultPersistence.call(this)
     this.sequelize = new Sequelize(url);
     this.models = {}
-
 }
 SequelizePlugin.prototype = Object.create(DefaultPersistence.prototype)
 SequelizePlugin.prototype.constructor = SequelizePlugin
