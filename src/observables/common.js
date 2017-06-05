@@ -1,6 +1,4 @@
-const {
-    Observable
-} = require("rx")
+const {Observable} = require("rx")
 const inquirer = require("inquirer")
 
 const _ = {};

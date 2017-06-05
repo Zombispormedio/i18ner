@@ -1,0 +1,10 @@
+common:
+  confirm:
+    question: "¿Estás seguro?"
+    answer: 
+      yes: "Yes"
+      no: "No"
+  exceptions:
+    no_conection: "No hay conexión"
+login:
+  register: "Register"
