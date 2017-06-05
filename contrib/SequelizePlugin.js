@@ -4,7 +4,7 @@ var Sequelize;
 
 try{
     Sequelize = require("sequelize")
-}catch{
+}catch(e){
     console.warn("Install sequelize and every dependencies that it needs")
     process.exit()
 }
