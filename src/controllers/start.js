@@ -14,7 +14,7 @@ _.init = function () {
     const {
         mapper,
         persistence
-    } = require(process.cwd() + "/" + "speakers.config.js")
+    } = require(process.cwd() + "/" + "i18n.config.js")
 
     if (!_.checkConfiguration()) {
         return console.log("Bad configuration")
