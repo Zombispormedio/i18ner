@@ -16,7 +16,7 @@ _.init = function () {
         persistence
     } = require(process.cwd() + "/" + "i18n.config.js")
 
-    if (!_.checkConfiguration()) {
+    if (!_.checkConfiguration(mapper, persistence)) {
         return console.log("Bad configuration")
     }
     persistence.isAvailable()
