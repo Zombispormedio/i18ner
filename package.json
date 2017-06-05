@@ -1,10 +1,10 @@
 {
   "name": "speakers",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Simple i18n management system",
   "main": "src/index.js",
-  "bin" : {
-    "speakers" : "./src/index.js"
+  "bin": {
+    "speakers": "./src/index.js"
   },
   "author": "Xavier Serrano",
   "license": "MIT",
@@ -20,5 +20,6 @@
   },
   "devDependencies": {
     "ava": "^0.19.1"
-  }
+  },
+  "repository": "https://github.com/Zombispormedio/speakers.git"
 }
