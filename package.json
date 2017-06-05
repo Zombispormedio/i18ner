@@ -1,6 +1,6 @@
 {
   "name": "i18ner",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Simple i18n management system",
   "main": "src/index.js",
   "bin": {
