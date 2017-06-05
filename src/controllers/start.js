@@ -1,9 +1,10 @@
 const _ = {}
 
+const speakersConfig = require(process.cwd()+"/"+"speakers.config.js")
 
 
 _.init = function(){
-    
+
 }
 
 
