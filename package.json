@@ -4,7 +4,7 @@
   "description": "Simple i18n management system",
   "main": "src/index.js",
   "bin": {
-    "speakers": "./src/index.js"
+    "i18ner": "./src/index.js"
   },
   "author": "Xavier Serrano",
   "license": "MIT",
