@@ -5,43 +5,60 @@ const DefaultPersistence = require("../plugins/DefaultPersistence")
 
 const _ = {}
 
-const speakersConfig = require(process.cwd()+"/"+"speakers.config.js")
-
-_.checkConfiguration = function(){
-    return speakersConfig.mapper instanceof DefaultMapper && speakersConfig.persistence instanceof DefaultPersistence
+_.checkConfiguration = function (mapper, persistence) {
+    return mapper instanceof DefaultMapper && persistence instanceof DefaultPersistence
 }
 
 
-_.init = function(){
-    if(!_.checkConfiguration()){
+_.init = function () {
+    const {
+        mapper,
+        persistence
+    } = require(process.cwd() + "/" + "speakers.config.js")
+
+    if (!_.checkConfiguration()) {
         return console.log("Bad configuration")
     }
-
-    Locales.existsDir()
-    .filter((exists) => exists)
-    .flatMap(() => Observable.readdir(Locales.getLocalesDir()))
-    .flatMap(Observable.fromArray)
-    .map(name =>{
-        return {name: name, pathname: Locales.getLocalePath(name)}
-    })
-    .flatMap(locale => {
-        return Observable.readFile(locale.pathname)
-                        .map(raw => Object.assign({raw}, locale))
-    })
-    .flatMap(locale => {
-        return Observable.loadYaml(locale.raw)
-                        .map(yamlObject => Object.assign({yamlObject}, {name: locale.name, pathname: locale.pathname}))
-    })
-    .map(locale =>{
-        locale.yamlObject = speakersConfig.mapper.apply(locale.yamlObject)
-        return locale
-    })
-    .doOnNext(console.log)
-    .subscribe()
+    persistence.isAvailable()
+        .filter(isAvailable => isAvailable)
+        .flatMap(Locales.existsDir)
+        .filter((exists) => exists)
+        .flatMap(() => Observable.readdir(Locales.getLocalesDir()))
+        .flatMap(Observable.fromArray)
+        .map(filename => {
+            return {
+                filename: filename,
+                pathname: Locales.getLocalePath(filename)
+            }
+        })
+        .flatMap(locale => {
+            return Observable.readFile(locale.pathname)
+                .map(raw => Object.assign({
+                    raw
+                }, locale))
+        })
+        .flatMap(locale => {
+            return Observable.loadYaml(locale.raw)
+                .map(translation => Object.assign({
+                    translation
+                }, {
+                    lang: locale.filename.split(".")[0],
+                }))
+        })
+        .map(locale => {
+            locale.translation = mapper.apply(locale.translation)
+            return locale
+        })
+        .flatMap((locale) => persistence.save(locale))
+        .doOnCompleted(() => {
+            persistence.finish()
+            console.log("Ok")
+        })
+        .subscribe()
 }
 
 
 module.exports = {
-    init : () => _.init,
-    test : () => _
+    init: () => _.init,
+    test: () => _
 }
