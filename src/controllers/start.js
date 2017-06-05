@@ -1,14 +1,7 @@
 const Observable = require('../observables/main')
 const Locales = require("../domain/locales")
-const DefaultMapper = require("../plugins/DefaultMapper")
-const DefaultPersistence = require("../plugins/DefaultPersistence")
 
 const _ = {}
-
-_.checkConfiguration = function (mapper, persistence) {
-    return mapper instanceof DefaultMapper && persistence instanceof DefaultPersistence
-}
-
 
 _.init = function () {
     const {
@@ -16,9 +9,6 @@ _.init = function () {
         persistence
     } = require(process.cwd() + "/" + "i18n.config.js")
 
-    if (!_.checkConfiguration(mapper, persistence)) {
-        return console.log("Bad configuration")
-    }
     persistence.isAvailable()
         .filter(isAvailable => isAvailable)
         .flatMap(Locales.existsDir)
