@@ -11,11 +11,14 @@ try{
 
 const {Observable} = require("rx")
 
-function SequelizePlugin(url) {
+function SequelizePlugin(url, logging) {
     DefaultPersistence.call(this)
-    this.sequelize = new Sequelize(url);
+    this.sequelize = new Sequelize(url, {
+        logging: logging != void 0 && logging === true
+    });
     this.models = {}
 }
+
 SequelizePlugin.prototype = Object.create(DefaultPersistence.prototype)
 SequelizePlugin.prototype.constructor = SequelizePlugin
 

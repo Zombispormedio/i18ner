@@ -6,7 +6,8 @@ const _ = {}
 _.init = function () {
     const {
         mapper,
-        persistence
+        persistence,
+        completer
     } = require(process.cwd() + "/" + "i18n.config.js")
 
     persistence.isAvailable()
@@ -32,8 +33,8 @@ _.init = function () {
                 .map(translation => Object.assign({
                     translation
                 }, {
-                    lang: locale.filename.split(".")[0],
-                }))
+                        lang: locale.filename.split(".")[0],
+                    }))
         })
         .map(locale => {
             locale.translation = mapper.apply(locale.translation)
@@ -41,8 +42,10 @@ _.init = function () {
         })
         .flatMap((locale) => persistence.save(locale))
         .doOnCompleted(() => {
-            persistence.finish()
-            console.log("Ok")
+            completer(persistence, () => {
+                persistence.finish()
+                console.log("Ok")
+            })
         })
         .subscribe()
 }
