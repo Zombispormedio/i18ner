@@ -14,12 +14,12 @@
   },
   "dependencies": {
     "commander": "^2.9.0",
-    "inquirer": "^3.0.6",
+    "inquirer": "^6.0.0",
     "js-yaml": "^3.8.4",
     "rx": "^4.1.0"
   },
   "devDependencies": {
-    "ava": "^0.19.1"
+    "ava": "^0.25.0"
   },
   "repository": "https://github.com/Zombispormedio/i18ner.git"
 }
